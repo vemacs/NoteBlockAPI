@@ -97,13 +97,16 @@ public abstract class SongPlayer {
                                 return;
                             }
                         }
-                        for (String s : playerList) {
-                            Player p = Bukkit.getPlayerExact(s);
-                            if (p == null) {
-                                // offline...
-                                continue;
-                            }
-                            playTick(p, tick);
+                        for (final String s : playerList) {
+                            Bukkit.getScheduler().runTaskAsynchronously(NoteBlockPlayerMain.plugin, new Runnable() {
+                                @Override
+                                public void run() {
+                                    Player p = Bukkit.getPlayerExact(s);
+                                    if (p != null) {
+                                        playTick(p, tick);
+                                    }
+                                }
+                            });
                         }
                     }
                     long duration = System.currentTimeMillis() - startTime;
